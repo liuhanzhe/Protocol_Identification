@@ -1,0 +1,5 @@
+<protocols>
+    <protocol name= "tcp.modbus">
+        <port>502</port>
+    </protocol>
+</protocols>
