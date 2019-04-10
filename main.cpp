@@ -29,17 +29,30 @@ int byte_to_port(u_short bport)
 }
 
 
-
-string find_tcp_protocol_from_config(int sport, int dport)
+/**
+    type: 0: tcp 
+          1: udp
+**/
+string find_protocol_from_config(int type, int sport, int dport)
 {
+    map<int, string> map_protocol;
+    if(type == 0)
+    {
+        map_protocol = map_tcp_protocol;
+    }
+    else if (type == 1)
+    {
+        map_protocol = map_udp_protocol;
+    }   
+    
     string protocol_name = "";
-    map<int, string>::iterator siter = map_tcp_protocol.find(sport);
-    map<int, string>::iterator piter = map_tcp_protocol.find(dport);
-    if(siter != map_tcp_protocol.end())
+    map<int, string>::iterator siter = map_protocol.find(sport);
+    map<int, string>::iterator piter = map_protocol.find(dport);
+    if(siter != map_protocol.end())
     {
         protocol_name = siter->second;
     }
-    else if(piter != map_tcp_protocol.end())
+    else if(piter != map_protocol.end())
     {
         protocol_name = piter->second;
     }
