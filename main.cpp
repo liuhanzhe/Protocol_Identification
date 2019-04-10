@@ -1,9 +1,3 @@
-
-#include <pcap.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "header.h"
 
 unsigned short hanlde_ether(const u_char * packet)
@@ -22,9 +16,27 @@ unsigned short hanlde_ether(const u_char * packet)
 	return ethernet_type;
 }
 
-void handle_ip()
+void handle_udp()
 {
 
+}
+
+void handle_tcp()
+{
+
+}
+
+
+void handle_ip(const u_char * packet)
+{
+    if(0x11==((struct IP_HEAD*)(packet+ETHER_HEADER_LEN))->ip_p)
+    {
+       //udp
+    }
+    else if(0x06==((struct IP_HEAD*)(packet+ETHER_HEADER_LEN))->ip_p)
+    {
+        //tcp
+    }
 }
 
 void handle_arp()
@@ -42,7 +54,7 @@ void handle_packet(u_char * arg, const struct pcap_pkthdr * pkthdr, const u_char
 	unsigned short ethernet_type = hanlde_ether(packet);
 	if(ethernet_type == 0x0800)
 	{
-		handle_ip();
+		handle_ip(packet);
 	}
 	else if(ethernet_type == 0x0806)
 	{
