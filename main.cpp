@@ -1,5 +1,10 @@
 #include "header.h"
 
+using namespace std;
+
+map<int, string> map_tcp_protocol;
+map<int, string> map_udp_protocol;
+
 unsigned short hanlde_ether(const u_char * packet)
 {
 	struct ether_header *ethernet_protocol;
@@ -16,14 +21,40 @@ unsigned short hanlde_ether(const u_char * packet)
 	return ethernet_type;
 }
 
+//16位16进制转10进制端口
+int byte_to_port(u_short bport)
+{
+    int port = ((u_char*)&bport)[0]*256 + ((u_char*)&bport)[1];
+    return port;
+}
+
+
+
+string find_tcp_protocol_from_config(int sport, int dport)
+{
+    string protocol_name = "";
+    map<int, string>::iterator siter = map_tcp_protocol.find(sport);
+    map<int, string>::iterator piter = map_tcp_protocol.find(dport);
+    if(siter != map_tcp_protocol.end())
+    {
+        protocol_name = siter->second;
+    }
+    else if(piter != map_tcp_protocol.end())
+    {
+        protocol_name = piter->second;
+    }
+    return protocol_name;
+}
+
 void handle_udp()
 {
 
 }
 
-void handle_tcp()
+void handle_tcp(const u_char * packet)
 {
-
+    int sport = byte_to_port(((struct TCP_HEAD*)(packet+ETHER_HEADER_LEN+IP_HEADER_LEN))->tcp_sport);
+    int dport = byte_to_port(((struct TCP_HEAD*)(packet+ETHER_HEADER_LEN+IP_HEADER_LEN))->tcp_dport);
 }
 
 
@@ -36,6 +67,7 @@ void handle_ip(const u_char * packet)
     else if(0x06==((struct IP_HEAD*)(packet+ETHER_HEADER_LEN))->ip_p)
     {
         //tcp
+        handle_tcp(packet);
     }
 }
 
@@ -66,16 +98,16 @@ void handle_packet(u_char * arg, const struct pcap_pkthdr * pkthdr, const u_char
 	}
 }
 
-//void load_protocol_config()
-//{
+void load_protocol_config()
+{
     
-//}
+}
 
 pcap_t* pcap_init()
 {
 	char errBuf[PCAP_ERRBUF_SIZE], * p_net_interface_name;
 
-    //load_protocol_config();
+    load_protocol_config();
 
     p_net_interface_name = pcap_lookupdev(errBuf);
 
