@@ -1,6 +1,7 @@
 #include "header.h"
 
 using namespace std;
+using namespace xercesc;
 
 map<int, string> map_tcp_protocol;
 map<int, string> map_udp_protocol;
@@ -113,7 +114,13 @@ void handle_packet(u_char * arg, const struct pcap_pkthdr * pkthdr, const u_char
 
 void load_protocol_config()
 {
-    
+    XMLPlatformUtils::Initialize();
+    XercesDOMParser *parser = new XercesDOMParser();parser->setValidationScheme(XercesDOMParser::Val_Always);
+    parser->setDoNamespaces(true);
+    ErrorHandler* errHandler = (ErrorHandler*) new HandlerBase();
+    parser->setErrorHandler(errHandler);
+
+    parser->parse(PROTOCOL_XML_PATH);
 }
 
 pcap_t* pcap_init()
@@ -138,7 +145,10 @@ pcap_t* pcap_init()
 }
 
 int main()
-{
+{   
+    
+
+    load_protocol_config();
     
     pcap_t *pcap_handle = pcap_init();
 

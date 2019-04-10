@@ -6,18 +6,26 @@
 
 #include <string>
 #include <map>
+	
+	
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/sax/HandlerBase.hpp>
+#include <xercesc/parsers/XercesDOMParser.hpp>
 
 #define ETHER_ADDR_LEN 6
 #define ETHER_HEADER_LEN 14
 #define IP_HEADER_LEN 20
 #define TCP_HEADER_LEN 20
 
+#define PROTOCOL_XML_PATH "protocol_config/protocol.xml"
+
 struct ether_header
 {
 	unsigned char ether_dhost[ETHER_ADDR_LEN];	//目的mac
 	unsigned char ether_shost[ETHER_ADDR_LEN];	//源mac
 	unsigned short ether_type;		//以太网类型
-};
+};	
 
 /*IP头*/ //假设没有选项字段，长度20字节
 struct IP_HEAD
