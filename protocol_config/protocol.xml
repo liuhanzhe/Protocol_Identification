@@ -3,4 +3,8 @@
         <transport_type>tcp</transport_type>
         <port>502</port>
     </protocol>
+    <protocol name= "Siemens S7">
+        <transport_type>tcp</transport_type>
+        <port>102</port>
+    </protocol>
 </protocols>

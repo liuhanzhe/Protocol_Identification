@@ -11,7 +11,7 @@
 
 
 #define _DEBUG_
-#define _LOG_
+//#define _LOG_
 
 using namespace std;
 
