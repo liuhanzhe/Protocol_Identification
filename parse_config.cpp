@@ -81,3 +81,29 @@ DOMNode* ParseConfig::find_child_node(DOMNode *n, char *nodename)
      }
      return 0;
  }
+
+ string ParseConfig::find_protocol_by_port(int trans_type, int sport, int dport)
+ {
+    map<int, string> map_protocol;
+    if(trans_type == 0)
+    {
+        map_protocol = map_tcp_protocol;
+    }
+    else if (trans_type == 1)
+    {
+        map_protocol = map_udp_protocol;
+    }   
+    
+    string protocol_name = "";
+    map<int, string>::iterator siter = map_protocol.find(sport);
+    map<int, string>::iterator piter = map_protocol.find(dport);
+    if(siter != map_protocol.end())
+    {
+        protocol_name = siter->second;
+    }
+    else if(piter != map_protocol.end())
+    {
+        protocol_name = piter->second;
+    }
+    return protocol_name;
+ }

@@ -45,6 +45,7 @@ class ParseConfig
 
         ParseConfig();
         void load_protocol_config();
+        string find_protocol_by_port(int trans_type, int sport, int dport);
         
 };
 
