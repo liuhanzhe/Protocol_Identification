@@ -43,9 +43,9 @@ void ParseConfig::load_main_config()
                 string protocol_trans_type = XMLString::transcode(trans_type->getTextContent());
                 int protocol_port = pchar_to_int(XMLString::transcode(node_port->getTextContent()));
                 #ifdef _DEBUG_
-                    LOG_INFO("protocol name: %s", protocol_name.c_str());
-                    LOG_INFO("protocol trans type: %s", protocol_trans_type.c_str());
-                    LOG_INFO("protocol port: %d", protocol_port);
+                    LOG_INFO(LOG_LEVEL_INFO, "protocol name: %s", protocol_name.c_str());
+                    LOG_INFO(LOG_LEVEL_INFO, "protocol trans type: %s", protocol_trans_type.c_str());
+                    LOG_INFO(LOG_LEVEL_INFO, "protocol port: %d", protocol_port);
                     //LOG(LOG_INFO, "protocol name: %s", protocol_name.c_str());
                     //LOG(LOG_INFO, "protocol trans type: %s", protocol_trans_type.c_str());
                     //LOG(LOG_INFO, "protocol port: %d", protocol_port);

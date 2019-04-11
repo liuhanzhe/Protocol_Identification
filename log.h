@@ -27,8 +27,8 @@ static const char *log_level_str[5] = {
     "DEBUG", "INFO", "WARN", "ERROR", "FATAL",
 };
 
-#define LOG_INFO(...) \
-    log_message(LOG_LEVEL_INFO, NULL, 0, \
+#define LOG_INFO(level, ...) \
+    log_message(level, NULL, 0, \
         __FILE__, __LINE__, __VA_ARGS__)
 
 /**
