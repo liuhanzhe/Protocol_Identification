@@ -1,3 +1,6 @@
+#ifndef _HEADER_H_
+#define _HEADER_H_
+
 #include <pcap.h>
 #include <time.h>
 #include <stdlib.h>
@@ -5,20 +8,15 @@
 #include <arpa/inet.h>
 
 #include <string>
-#include <map>
 	
-	
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
-#include <xercesc/parsers/XercesDOMParser.hpp>
+
 
 #define ETHER_ADDR_LEN 6
 #define ETHER_HEADER_LEN 14
 #define IP_HEADER_LEN 20
 #define TCP_HEADER_LEN 20
 
-#define PROTOCOL_XML_PATH "protocol_config/protocol.xml"
+
 
 struct ether_header
 {
@@ -71,3 +69,4 @@ struct ICMP_HEAD
     unsigned char code;        //代码  
     unsigned short chk_sum;    //16位检验和  
 };
+#endif

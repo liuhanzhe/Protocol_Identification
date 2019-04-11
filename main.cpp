@@ -1,10 +1,9 @@
 #include "header.h"
+#include "parse_config.h"
 
 using namespace std;
-using namespace xercesc;
 
-map<int, string> map_tcp_protocol;
-map<int, string> map_udp_protocol;
+
 
 unsigned short hanlde_ether(const u_char * packet)
 {
@@ -34,6 +33,7 @@ int byte_to_port(u_short bport)
     type: 0: tcp 
           1: udp
 **/
+/**
 string find_protocol_from_config(int type, int sport, int dport)
 {
     map<int, string> map_protocol;
@@ -59,6 +59,7 @@ string find_protocol_from_config(int type, int sport, int dport)
     }
     return protocol_name;
 }
+*/
 
 void handle_udp()
 {
@@ -112,22 +113,13 @@ void handle_packet(u_char * arg, const struct pcap_pkthdr * pkthdr, const u_char
 	}
 }
 
-void load_protocol_config()
-{
-    XMLPlatformUtils::Initialize();
-    XercesDOMParser *parser = new XercesDOMParser();parser->setValidationScheme(XercesDOMParser::Val_Always);
-    parser->setDoNamespaces(true);
-    ErrorHandler* errHandler = (ErrorHandler*) new HandlerBase();
-    parser->setErrorHandler(errHandler);
 
-    parser->parse(PROTOCOL_XML_PATH);
-}
 
 pcap_t* pcap_init()
 {
 	char errBuf[PCAP_ERRBUF_SIZE], * p_net_interface_name;
 
-    load_protocol_config();
+    //load_protocol_config();
 
     p_net_interface_name = pcap_lookupdev(errBuf);
 
@@ -148,7 +140,7 @@ int main()
 {   
     
 
-    load_protocol_config();
+    //load_protocol_config();
     
     pcap_t *pcap_handle = pcap_init();
 
