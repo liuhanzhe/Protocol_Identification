@@ -1,9 +1,19 @@
+#include <pcap.h>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <arpa/inet.h>
+
+#include <string>
+
+#include "log.h"
 #include "header.h"
 #include "parse_config.h"
 
+
 using namespace std;
 
-
+ParseConfig* ParseConfig::parse_config= NULL;
 
 unsigned short hanlde_ether(const u_char * packet)
 {
@@ -129,7 +139,9 @@ pcap_t* pcap_init()
 		exit(-1);
 	}
 
-    printf("open device: %s\n", p_net_interface_name);
+    #ifdef _DEBUG_
+        //LOG(LOG_INFO, "open device: %s\n", p_net_interface_name);
+    #endif
 
     pcap_t *pcap_handle = pcap_open_live(p_net_interface_name, 65535, 1, 0, errBuf); 
 
@@ -138,10 +150,10 @@ pcap_t* pcap_init()
 
 int main()
 {   
-    ParseConfig parseConfig;
-    parseConfig.load_protocol_config();
+    ParseConfig::get_instance()->load_protocol_config();
+    //ParseConfig::get_instance()->load_protocol_config();
 
-    //load_protocol_config();
+    
     
     pcap_t *pcap_handle = pcap_init();
 

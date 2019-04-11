@@ -1,4 +1,5 @@
 #include "parse_config.h"
+#include "log.h"
 
 ParseConfig::ParseConfig()
 {
@@ -25,17 +26,11 @@ int ParseConfig::pchar_to_int(char* c)
     return result;
 }
 
-
-int ParseConfig::get_trans_type(string protocol_name)
-{
-    
-}
-
 void ParseConfig::load_main_config()
 {
     parser->parse(PROTOCOL_XML_PATH);
     DOMDocument *doc = parser->getDocument();
-    DOMElement *root = doc->getDocumentElement();//读取根节点
+    DOMElement *root = doc->getDocumentElement();
     DOMNode *DN=root;
     for (DN = DN->getFirstChild(); DN != 0;DN = DN->getNextSibling())
     {
@@ -47,9 +42,14 @@ void ParseConfig::load_main_config()
                 string protocol_name = XMLString::transcode(DN->getAttributes()->getNamedItem(XMLString::transcode("name"))->getNodeValue());
                 string protocol_trans_type = XMLString::transcode(trans_type->getTextContent());
                 int protocol_port = pchar_to_int(XMLString::transcode(node_port->getTextContent()));
-                cout << protocol_name <<endl;
-                cout << protocol_trans_type << endl;
-                cout << protocol_port << endl;
+                #ifdef _DEBUG_
+                    LOG_INFO("protocol name: %s", protocol_name.c_str());
+                    LOG_INFO("protocol trans type: %s", protocol_trans_type.c_str());
+                    LOG_INFO("protocol port: %d", protocol_port);
+                    //LOG(LOG_INFO, "protocol name: %s", protocol_name.c_str());
+                    //LOG(LOG_INFO, "protocol trans type: %s", protocol_trans_type.c_str());
+                    //LOG(LOG_INFO, "protocol port: %d", protocol_port);
+                #endif
                 if(protocol_trans_type == "tcp")
                     map_tcp_protocol.insert(pair<int,string>(protocol_port, protocol_name));
                 else if(protocol_trans_type == "udp")
@@ -61,7 +61,7 @@ void ParseConfig::load_main_config()
 
 
 DOMNode* ParseConfig::find_child_node(DOMNode *n, char *nodename)
- {//寻找n节点下子节点名为nodename的节点
+ {
      try
      {
          for (DOMNode *child = n->getFirstChild(); child != 0; child = child->getNextSibling())

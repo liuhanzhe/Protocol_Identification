@@ -1,22 +1,10 @@
 #ifndef _HEADER_H_
 #define _HEADER_H_
 
-#include <pcap.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <arpa/inet.h>
-
-#include <string>
-	
-
-
 #define ETHER_ADDR_LEN 6
 #define ETHER_HEADER_LEN 14
 #define IP_HEADER_LEN 20
 #define TCP_HEADER_LEN 20
-
-
 
 struct ether_header
 {

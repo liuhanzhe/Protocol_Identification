@@ -19,6 +19,8 @@ using namespace xercesc;
 
 using namespace std;
 
+
+
 class ParseConfig
 {
     private:
@@ -31,7 +33,16 @@ class ParseConfig
         int pchar_to_int(char*);
         int get_trans_type(string);
 
+        static ParseConfig *parse_config;
+
     public:
+        static ParseConfig* get_instance()
+        {
+            if(parse_config==NULL)
+                parse_config = new(ParseConfig);
+            return parse_config;
+        }
+
         ParseConfig();
         void load_protocol_config();
         
