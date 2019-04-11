@@ -3,6 +3,8 @@
 
 #include <map>
 #include <string>
+#include <iostream>
+#include <sstream> 
 
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/dom/DOM.hpp>
@@ -20,13 +22,19 @@ using namespace std;
 class ParseConfig
 {
     private:
+        XercesDOMParser *parser;
         map<int, string> map_tcp_protocol;
         map<int, string> map_udp_protocol;
 
+        void load_main_config();
+        DOMNode* find_child_node(DOMNode *n, char *nodename);
+        int pchar_to_int(char*);
+        int get_trans_type(string);
+
     public:
         ParseConfig();
-
         void load_protocol_config();
+        
 };
 
 

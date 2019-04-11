@@ -13,11 +13,11 @@ unsigned short hanlde_ether(const u_char * packet)
 
 	ethernet_protocol = (struct ether_header *)packet;
 	p_mac_string = (unsigned char *)ethernet_protocol->ether_shost;//获取源mac
-	printf("Mac Source Address is %02x:%02x:%02x:%02x:%02x:%02x\n",*(p_mac_string+0),*(p_mac_string+1),*(p_mac_string+2),*(p_mac_string+3),*(p_mac_string+4),*(p_mac_string+5));
+	//printf("Mac Source Address is %02x:%02x:%02x:%02x:%02x:%02x\n",*(p_mac_string+0),*(p_mac_string+1),*(p_mac_string+2),*(p_mac_string+3),*(p_mac_string+4),*(p_mac_string+5));
 	p_mac_string = (unsigned char *)ethernet_protocol->ether_dhost;//获取目的mac
-	printf("Mac Destination Address is %02x:%02x:%02x:%02x:%02x:%02x\n",*(p_mac_string+0),*(p_mac_string+1),*(p_mac_string+2),*(p_mac_string+3),*(p_mac_string+4),*(p_mac_string+5));
+	//printf("Mac Destination Address is %02x:%02x:%02x:%02x:%02x:%02x\n",*(p_mac_string+0),*(p_mac_string+1),*(p_mac_string+2),*(p_mac_string+3),*(p_mac_string+4),*(p_mac_string+5));
 	ethernet_type = ntohs(ethernet_protocol->ether_type);
-	printf("Ethernet type is :%04x\n",ethernet_type);
+	//printf("Ethernet type is :%04x\n",ethernet_type);
 	return ethernet_type;
 }
 
@@ -138,7 +138,8 @@ pcap_t* pcap_init()
 
 int main()
 {   
-    
+    ParseConfig parseConfig;
+    parseConfig.load_protocol_config();
 
     //load_protocol_config();
     

@@ -2,15 +2,82 @@
 
 ParseConfig::ParseConfig()
 {
+    XMLPlatformUtils::Initialize();
+    parser = new XercesDOMParser();parser->setValidationScheme(XercesDOMParser::Val_Always);
 }
 
 void ParseConfig::load_protocol_config()
-{
-    XMLPlatformUtils::Initialize();
-    XercesDOMParser *parser = new XercesDOMParser();parser->setValidationScheme(XercesDOMParser::Val_Always);
+{   
+    
     parser->setDoNamespaces(true);
     ErrorHandler* errHandler = (ErrorHandler*) new HandlerBase();
     parser->setErrorHandler(errHandler);
-
-    parser->parse(PROTOCOL_XML_PATH);
+    load_main_config();
+    
 }
+
+int ParseConfig::pchar_to_int(char* c)
+{
+    stringstream ss;
+    int result;
+    ss << c;
+    ss >> result;
+    return result;
+}
+
+
+int ParseConfig::get_trans_type(string protocol_name)
+{
+    
+}
+
+void ParseConfig::load_main_config()
+{
+    parser->parse(PROTOCOL_XML_PATH);
+    DOMDocument *doc = parser->getDocument();
+    DOMElement *root = doc->getDocumentElement();//读取根节点
+    DOMNode *DN=root;
+    for (DN = DN->getFirstChild(); DN != 0;DN = DN->getNextSibling())
+    {
+        if (DN->getNodeType() == DOMNode::ELEMENT_NODE)
+        {            
+            if (XMLString::compareString(DN->getNodeName(),XMLString::transcode("protocol")) == 0){   
+                DOMNode *trans_type = find_child_node(DN, (char*)"transport_type");                          
+                DOMNode *node_port = find_child_node(DN, (char*)"port");
+                string protocol_name = XMLString::transcode(DN->getAttributes()->getNamedItem(XMLString::transcode("name"))->getNodeValue());
+                string protocol_trans_type = XMLString::transcode(trans_type->getTextContent());
+                int protocol_port = pchar_to_int(XMLString::transcode(node_port->getTextContent()));
+                cout << protocol_name <<endl;
+                cout << protocol_trans_type << endl;
+                cout << protocol_port << endl;
+                if(protocol_trans_type == "tcp")
+                    map_tcp_protocol.insert(pair<int,string>(protocol_port, protocol_name));
+                else if(protocol_trans_type == "udp")
+                    map_udp_protocol.insert(pair<int,string>(protocol_port, protocol_name));
+            }
+        }
+    }
+}
+
+
+DOMNode* ParseConfig::find_child_node(DOMNode *n, char *nodename)
+ {//寻找n节点下子节点名为nodename的节点
+     try
+     {
+         for (DOMNode *child = n->getFirstChild(); child != 0; child = child->getNextSibling())
+         {
+             if (child->getNodeType() == DOMNode::ELEMENT_NODE  && XMLString::compareString(child->getNodeName(), XMLString::transcode(nodename)) == 0)
+             {
+                 return child;
+             }
+         }
+     }
+     catch (const XMLException& toCatch)
+     {
+         char* message = XMLString::transcode(toCatch.getMessage());
+         cout << "Exception message is: \n"
+             << message << "\n";
+         XMLString::release(&message);
+     }
+     return 0;
+ }
