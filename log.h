@@ -9,6 +9,12 @@
 #include <time.h>
 #include <unistd.h>
 
+
+#define _DEBUG_
+#define _LOG_
+
+using namespace std;
+
 /* 日志级别 */
 #define LOG_LEVEL_FATAL   (4)
 #define LOG_LEVEL_ERROR   (3)
@@ -20,10 +26,6 @@
 static const char *log_level_str[5] = {
     "DEBUG", "INFO", "WARN", "ERROR", "FATAL",
 };
-
-#define _DEBUG_
-
-using namespace std;
 
 #define LOG_INFO(...) \
     log_message(LOG_LEVEL_INFO, NULL, 0, \
@@ -79,9 +81,11 @@ log_to_fd(int fd, int level, unsigned char *data, int data_len,
     #ifdef _DEBUG_
         write(STDERR_FILENO, log_buff, log_buff_pos - log_buff);
     #endif
-
+    
+    #ifdef _LOG_
     /* 写入日志文件 */
     write(fd, log_buff, log_buff_pos - log_buff);
+    #endif   
     
 }
    
@@ -105,8 +109,7 @@ static inline void log_message(int level, unsigned char *data, int data_len,
 
     va_start(ap, fmt);
     log_to_fd(log_fd, level, data, data_len, file, line, fmt, ap);
-    va_end(ap);
-        
+    va_end(ap);        
 }
 
 
