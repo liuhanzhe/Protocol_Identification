@@ -60,6 +60,7 @@ class ParseConfig
         string get_protocol(const u_char * packet, int trans_type, int sport, int dport);
         string find_protocol_by_port(int trans_type, int sport, int dport);
         
+        void get_protocol_key_by_name(string, struct ParseConfig::protocol_key_value*);
 };
 
 

@@ -58,11 +58,12 @@ void ParseConfig::load_main_config()
                             LOG_INFO(LOG_LEVEL_INFO, "key_lengt: %d", key_length);
                             LOG_INFO(LOG_LEVEL_INFO, "value: %s", value.c_str());
                         #endif
-                        //KeyValue key_value;
+                        KeyValue key_value;
 
-                        //key_value.offset = key_offset;
-                        //key_value.length = key_length;
-                        //key_value.value = value;
+                        key_value.offset = key_offset;
+                        key_value.length = key_length;
+                        key_value.value = value;
+                        map_protocol_detail.insert(pair<string, KeyValue>(protocol_name, key_value));
                     }   
 
                     #ifdef _DEBUG_
@@ -117,7 +118,18 @@ DOMNode* ParseConfig::find_child_node(DOMNode *n, char *nodename)
  string ParseConfig::get_protocol(const u_char * packet, int trans_type, int sport, int dport)
  {
     string protocol_name = find_protocol_by_port(trans_type, sport, dport);
+    KeyValue *detail;
+    if (protocol_name != "")
+    {
+        get_protocol_key_by_name(protocol_name, detail);
+    }
+    int offset = detail->offset;
+    int length = detail->length;
+    string value = detail->value;
+    
  }
+
+
 
  string ParseConfig::find_protocol_by_port(int trans_type, int sport, int dport)
  {
@@ -144,3 +156,13 @@ DOMNode* ParseConfig::find_child_node(DOMNode *n, char *nodename)
     }
     return protocol_name;
  }
+
+
+void ParseConfig::get_protocol_key_by_name(string name, struct ParseConfig::protocol_key_value *key_value)
+{
+    map<string, KeyValue>::iterator siter = map_protocol_detail.find(name);
+    if(siter != map_protocol_detail.end())
+    {
+        *key_value = siter->second;
+    }
+}
