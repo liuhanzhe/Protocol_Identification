@@ -2,6 +2,7 @@
     <protocol name= "tcp.modbus">
         <transport_type>tcp</transport_type>
         <port>502</port>
+        <keyvalue offset="2" length="2">0000</keyvalue>
     </protocol>
     <protocol name= "Siemens S7">
         <transport_type>tcp</transport_type>

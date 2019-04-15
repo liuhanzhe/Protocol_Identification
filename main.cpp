@@ -15,6 +15,7 @@ using namespace std;
 
 ParseConfig* ParseConfig::parse_config= NULL;
 
+
 unsigned short hanlde_ether(const u_char * packet)
 {
 	struct ether_header *ethernet_protocol;
@@ -80,6 +81,7 @@ void handle_tcp(const u_char * packet)
 {
     int sport = byte_to_port(((struct TCP_HEAD*)(packet+ETHER_HEADER_LEN+IP_HEADER_LEN))->tcp_sport);
     int dport = byte_to_port(((struct TCP_HEAD*)(packet+ETHER_HEADER_LEN+IP_HEADER_LEN))->tcp_dport);
+    ParseConfig::get_instance()->get_protocol(packet, 0, sport, dport);
 }
 
 

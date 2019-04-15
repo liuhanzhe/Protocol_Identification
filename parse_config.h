@@ -27,11 +27,23 @@ class ParseConfig
         XercesDOMParser *parser;
         map<int, string> map_tcp_protocol;
         map<int, string> map_udp_protocol;
+        
+        typedef struct protocol_key_value
+        {
+            int offset;
+            int length;
+            string value;
+        } KeyValue;
+        map<string, KeyValue> map_protocol_detail;
 
+        
         void load_main_config();
+
         DOMNode* find_child_node(DOMNode *n, char *nodename);
         int pchar_to_int(char*);
         int get_trans_type(string);
+        
+        
 
         static ParseConfig *parse_config;
 
@@ -45,6 +57,7 @@ class ParseConfig
 
         ParseConfig();
         void load_protocol_config();
+        string get_protocol(const u_char * packet, int trans_type, int sport, int dport);
         string find_protocol_by_port(int trans_type, int sport, int dport);
         
 };
